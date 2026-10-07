@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="690" viewBox="0 0 1600 690" role="img" aria-labelledby="title desc">
+  <title id="title">LaunchGuard durable product launch workflow</title>
+  <desc id="desc">Evidence passes through deterministic services, pauses at a durable human review boundary, and reaches a guarded Shopify draft connector.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071426"/><stop offset="1" stop-color="#12183A"/></linearGradient>
+    <linearGradient id="node" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#132D4C"/><stop offset="1" stop-color="#18264B"/></linearGradient>
+    <linearGradient id="approval" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2D2A65"/><stop offset="1" stop-color="#253855"/></linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#45D7E5"/></marker>
+    <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".32"/></filter>
+    <style>
+      .eyebrow{font:700 14px Inter,system-ui,sans-serif;letter-spacing:2.6px;fill:#55DDE9}.head{font:700 32px Inter,system-ui,sans-serif;fill:#F7FAFF}.copy{font:400 15px Inter,system-ui,sans-serif;fill:#9DB0C9}.title{font:700 17px Inter,system-ui,sans-serif;fill:#F8FAFF}.sub{font:400 12px Inter,system-ui,sans-serif;fill:#9FB2CA}.num{font:800 11px Inter,system-ui,sans-serif;fill:#06131F}.pill{font:700 11px Inter,system-ui,sans-serif;fill:#BBF4E5}.stop{font:700 11px Inter,system-ui,sans-serif;fill:#FFC0C7}
+    </style>
+  </defs>
+  <rect width="1600" height="690" rx="26" fill="url(#bg)"/>
+  <circle cx="1480" cy="20" r="260" fill="#6953E6" opacity=".08"/><circle cx="70" cy="700" r="280" fill="#31CAD8" opacity=".06"/>
+  <text x="62" y="66" class="eyebrow">DURABLE LANGGRAPH WORKFLOW</text>
+  <text x="62" y="108" class="head">Evidence in. Accountable decision out.</text>
+  <text x="62" y="138" class="copy">Deterministic services surround one replaceable generation component and a real interrupt/resume boundary.</text>
+  <g fill="none" stroke="#45D7E5" stroke-width="3" marker-end="url(#arrow)">
+    <path d="M252 247H292"/><path d="M482 247H522"/><path d="M712 247H752"/><path d="M942 247H982"/><path d="M1172 247H1212"/>
+    <path d="M1307 294V402"/><path d="M1212 449H1172"/><path d="M982 449H942"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="62" y="200" width="190" height="94" rx="17" fill="url(#node)" stroke="#2B5776"/><circle cx="86" cy="223" r="12" fill="#45D7E5"/><text x="86" y="227" text-anchor="middle" class="num">1</text><text x="86" y="254" class="title">Validate evidence</text><text x="86" y="277" class="sub">Strict operator data contract</text>
+    <rect x="292" y="200" width="190" height="94" rx="17" fill="url(#node)" stroke="#2B5776"/><circle cx="316" cy="223" r="12" fill="#45D7E5"/><text x="316" y="227" text-anchor="middle" class="num">2</text><text x="316" y="254" class="title">Resolve FX</text><text x="316" y="277" class="sub">Live source + provenance</text>
+    <rect x="522" y="200" width="190" height="94" rx="17" fill="url(#node)" stroke="#2B5776"/><circle cx="546" cy="223" r="12" fill="#45D7E5"/><text x="546" y="227" text-anchor="middle" class="num">3</text><text x="546" y="254" class="title">Retrieve policy</text><text x="546" y="277" class="sub">FTS5 + versioned citations</text>
+    <rect x="752" y="200" width="190" height="94" rx="17" fill="url(#node)" stroke="#2B5776"/><circle cx="776" cy="223" r="12" fill="#45D7E5"/><text x="776" y="227" text-anchor="middle" class="num">4</text><text x="776" y="254" class="title">Price scenarios</text><text x="776" y="277" class="sub">Margin floor + four cases</text>
+    <rect x="982" y="200" width="190" height="94" rx="17" fill="url(#node)" stroke="#2B5776"/><circle cx="1006" cy="223" r="12" fill="#9D8CFF"/><text x="1006" y="227" text-anchor="middle" class="num">5</text><text x="1006" y="254" class="title">Generate listing</text><text x="1006" y="277" class="sub">Structured, cited output</text>
+    <rect x="1212" y="200" width="190" height="94" rx="17" fill="url(#node)" stroke="#2B5776"/><circle cx="1236" cy="223" r="12" fill="#45D7E5"/><text x="1236" y="227" text-anchor="middle" class="num">6</text><text x="1236" y="254" class="title">Run compliance</text><text x="1236" y="277" class="sub">Blockers stop the graph</text>
+    <rect x="1212" y="402" width="190" height="94" rx="17" fill="url(#approval)" stroke="#8575E8"/><circle cx="1236" cy="425" r="12" fill="#9D8CFF"/><text x="1236" y="429" text-anchor="middle" class="num">7</text><text x="1236" y="456" class="title">Human review</text><text x="1236" y="479" class="sub">Interrupt · edit · resume</text>
+    <rect x="982" y="402" width="190" height="94" rx="17" fill="#103C43" stroke="#43D6B0"/><circle cx="1006" cy="425" r="12" fill="#43D6B0"/><text x="1006" y="429" text-anchor="middle" class="num">8</text><text x="1006" y="456" class="title">Shopify DRAFT</text><text x="1006" y="479" class="sub">Lookup + ledger + receipt</text>
+  </g>
+  <path d="M1307 294V337H1470" fill="none" stroke="#E97885" stroke-width="2" stroke-dasharray="7 6"/>
+  <rect x="1415" y="321" width="124" height="32" rx="16" fill="#48243A" stroke="#8F455A"/><text x="1477" y="341" text-anchor="middle" class="stop">BLOCKED</text>
+  <path d="M1307 496V548H1470" fill="none" stroke="#E97885" stroke-width="2" stroke-dasharray="7 6"/>
+  <rect x="1410" y="532" width="132" height="32" rx="16" fill="#48243A" stroke="#8F455A"/><text x="1476" y="552" text-anchor="middle" class="stop">REJECTED</text>
+  <rect x="62" y="380" width="650" height="190" rx="18" fill="#0A192B" stroke="#203B55"/>
+  <text x="88" y="417" class="eyebrow">PERSISTENCE AND AUDIT</text>
+  <text x="88" y="454" class="title">SQLite checkpoints</text><text x="88" y="479" class="sub">Graph position · pending interrupt · restart-safe thread ID</text>
+  <text x="88" y="521" class="title">Operational ledger</text><text x="88" y="546" class="sub">Run snapshots · node latency · approvals · delivery receipts</text>
+  <rect x="62" y="611" width="164" height="32" rx="16" fill="#15364D"/><text x="144" y="631" text-anchor="middle" class="pill">SAFE BY DEFAULT</text>
+  <text x="248" y="632" class="copy">No paid key required · dry-run default · draft-only live delivery · explicit fallbacks</text>
+</svg>

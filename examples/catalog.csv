@@ -1,0 +1,3 @@
+sku,title,description,vendor,market,source_currency,target_currency,unit_cost,inbound_shipping,fulfillment_cost,duty_rate,platform_fee_rate,vat_rate,return_reserve_rate,ad_cost_rate,target_margin,competitor_price,source_reference
+LG-BTL-001,Vacuum Insulated Travel Bottle,"A 750 ml stainless-steel bottle with a locking lid, double-wall insulation, and a replaceable silicone seal.",Northstar Supply,US,CNY,USD,62.00,18.00,4.20,0.075,0.029,0.000,0.060,0.120,0.250,29.99,supplier-quote-2026-09-18
+LG-LAMP-002,Rechargeable Reading Lamp,"A compact LED reading lamp with three brightness levels, USB-C charging, and a weighted desk base.",Northstar Supply,US,EUR,USD,11.40,2.60,3.10,0.030,0.029,0.000,0.050,0.100,0.220,34.99,supplier-quote-2026-09-22

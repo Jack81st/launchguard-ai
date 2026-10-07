@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LaunchGuard Control Room</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --surface: #0c1a2d;
+      --surface-2: #11233b;
+      --line: #203a57;
+      --text: #f4f8ff;
+      --muted: #94a9c3;
+      --cyan: #46d8e6;
+      --violet: #9d8cff;
+      --green: #54d6ad;
+      --amber: #f1bd69;
+      --red: #ef7f8a;
+      --shadow: 0 22px 70px rgba(0, 0, 0, .28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 76% -10%, rgba(109, 86, 255, .18), transparent 32%),
+        radial-gradient(circle at -5% 82%, rgba(49, 201, 216, .12), transparent 30%),
+        var(--bg);
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .app { max-width: 1540px; margin: 0 auto; padding: 0 28px 42px; }
+    header {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(107, 137, 169, .18);
+    }
+    .brand { display: flex; align-items: center; gap: 13px; font-size: 20px; font-weight: 750; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 11px;
+      display: grid; place-items: center;
+      color: #06131f; font-weight: 900;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      box-shadow: 0 8px 28px rgba(70, 216, 230, .22);
+    }
+    .header-meta { display: flex; align-items: center; gap: 10px; }
+    .chip { border: 1px solid var(--line); border-radius: 999px; padding: 7px 12px; color: var(--muted); font-size: 12px; }
+    .chip.safe { color: #adf1dc; border-color: #286757; background: rgba(45, 120, 99, .17); }
+    .hero { padding: 54px 2px 34px; display: flex; align-items: end; justify-content: space-between; gap: 30px; }
+    .eyebrow { color: var(--cyan); letter-spacing: .16em; font-size: 12px; font-weight: 800; }
+    h1 { margin: 10px 0 12px; font-size: clamp(34px, 4vw, 56px); line-height: 1.04; letter-spacing: -.035em; }
+    .hero p { margin: 0; max-width: 760px; color: var(--muted); line-height: 1.65; font-size: 16px; }
+    .hero-stat { text-align: right; white-space: nowrap; }
+    .hero-stat strong { display: block; font-size: 30px; }
+    .hero-stat span { color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 22px; align-items: start; }
+    .panel {
+      background: linear-gradient(155deg, rgba(16, 36, 61, .98), rgba(9, 25, 44, .98));
+      border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow);
+    }
+    .form-panel { padding: 24px; position: sticky; top: 18px; }
+    .panel-title { margin: 0; font-size: 18px; }
+    .panel-copy { margin: 7px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    label { display: block; color: #b9c8da; font-size: 12px; font-weight: 700; margin: 14px 0 7px; }
+    input, textarea, select {
+      width: 100%; border: 1px solid #294661; border-radius: 10px; padding: 11px 12px;
+      color: var(--text); background: #081624; outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(70, 216, 230, .10); }
+    textarea { resize: vertical; min-height: 88px; line-height: 1.45; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .primary {
+      width: 100%; margin-top: 20px; border: 0; border-radius: 11px; padding: 13px 16px;
+      color: #06131f; font-weight: 800;
+      background: linear-gradient(100deg, var(--cyan), var(--violet));
+      box-shadow: 0 12px 32px rgba(83, 173, 229, .2);
+    }
+    button:disabled { opacity: .55; cursor: wait; }
+    .history { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .history h3 { margin: 0 0 12px; font-size: 13px; color: #b9c8da; }
+    .history-item { padding: 10px 0; border-bottom: 1px solid rgba(54, 81, 109, .45); cursor: pointer; }
+    .history-item strong { display: block; font-size: 12px; }
+    .history-item span { color: var(--muted); font-size: 11px; }
+    .workspace { min-width: 0; }
+    .empty { min-height: 540px; display: grid; place-items: center; text-align: center; padding: 50px; }
+    .empty-icon { margin: 0 auto 18px; width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; font-size: 25px; background: #122c46; border: 1px solid #2a536d; color: var(--cyan); }
+    .empty h2 { margin: 0 0 8px; }
+    .empty p { color: var(--muted); max-width: 510px; line-height: 1.6; }
+    .hidden { display: none !important; }
+    .run-header { padding: 23px 25px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .run-header small { color: var(--muted); }
+    .run-header h2 { margin: 5px 0 0; font-size: 23px; }
+    .status { padding: 8px 13px; border-radius: 999px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; background: #17344c; color: var(--cyan); }
+    .status.pending_approval { background: rgba(142, 112, 37, .24); color: #ffd38b; }
+    .status.completed, .status.approved { background: rgba(42, 124, 96, .24); color: #8df0cd; }
+    .status.rejected, .status.blocked, .status.failed { background: rgba(139, 52, 67, .25); color: #ffabb4; }
+    .metrics { margin-top: 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .metric { padding: 18px; min-height: 108px; }
+    .metric span { color: var(--muted); font-size: 12px; }
+    .metric strong { display: block; margin-top: 9px; font-size: 24px; letter-spacing: -.02em; }
+    .metric small { display: block; margin-top: 6px; color: #6f88a6; font-size: 11px; }
+    .content-grid { margin-top: 14px; display: grid; grid-template-columns: 1.18fr .82fr; gap: 14px; }
+    .section { padding: 22px; min-width: 0; }
+    .section h3 { margin: 0 0 16px; font-size: 16px; }
+    .listing-title { font-size: 20px; font-weight: 750; }
+    .listing-body { color: #c5d2e2; line-height: 1.6; font-size: 14px; }
+    .listing-body h2 { font-size: 15px; margin-top: 18px; }
+    .listing-body li { margin: 6px 0; }
+    .tag { display: inline-block; margin: 8px 5px 0 0; padding: 5px 8px; border-radius: 7px; background: #142e49; color: #a9c2de; font-size: 11px; }
+    .finding, .citation { border: 1px solid #25415c; border-radius: 11px; padding: 12px; margin: 9px 0; background: rgba(6, 20, 35, .48); }
+    .finding strong, .citation strong { display: block; font-size: 12px; }
+    .finding span, .citation span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .finding.warning { border-color: #765d2c; }
+    .finding.blocker { border-color: #7c3946; }
+    .timeline { position: relative; margin-left: 5px; }
+    .event { position: relative; padding: 0 0 18px 27px; color: #c5d2e2; font-size: 13px; }
+    .event::before { content: ""; position: absolute; left: 2px; top: 3px; width: 10px; height: 10px; border-radius: 50%; background: var(--cyan); }
+    .event::after { content: ""; position: absolute; left: 6px; top: 15px; bottom: 1px; width: 2px; background: #29465f; }
+    .event:last-child::after { display: none; }
+    .event small { color: var(--muted); margin-left: 7px; }
+    .review { margin-top: 14px; padding: 24px; border-color: #665b9b; background: linear-gradient(135deg, rgba(38, 43, 79, .98), rgba(13, 32, 55, .98)); }
+    .review-head { display: flex; justify-content: space-between; gap: 14px; align-items: start; }
+    .review h3 { margin: 0; }
+    .review p { color: var(--muted); font-size: 13px; }
+    .review-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .approve, .reject { border-radius: 10px; padding: 11px 17px; font-weight: 750; }
+    .approve { border: 0; color: #061a14; background: var(--green); }
+    .reject { border: 1px solid #73414a; color: #ffc1c7; background: rgba(102, 43, 55, .25); }
+    .error-banner { margin-bottom: 14px; border: 1px solid #7c3946; background: rgba(112, 40, 54, .22); color: #ffc0c7; border-radius: 12px; padding: 13px 15px; }
+    @media (max-width: 1050px) { .grid { grid-template-columns: 1fr; } .form-panel { position: static; } .metrics { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 720px) { .app { padding: 0 14px 28px; } .hero { padding-top: 34px; } .hero-stat { display: none; } .metrics, .content-grid, .row { grid-template-columns: 1fr; } .header-meta .chip:not(.safe) { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand"><div class="brand-mark">✓</div>LaunchGuard</div>
+      <div class="header-meta">
+        <span class="chip">Durable LangGraph workflow</span>
+        <span class="chip safe">Shopify dry-run by default</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">EVIDENCE → ECONOMICS → REVIEW → DRAFT</div>
+        <h1>Govern every product launch.</h1>
+        <p>Turn operator-owned SKU data into a policy-cited, margin-aware Shopify draft. Every consequential action pauses for review and resumes from a durable checkpoint.</p>
+      </div>
+      <div class="hero-stat"><strong>0</strong><span>automatic live publishes</span></div>
+    </section>
+
+    <main class="grid">
+      <aside class="panel form-panel">
+        <h2 class="panel-title">Launch evidence</h2>
+        <p class="panel-copy">The values below are evidence, not instructions. Every field is validated before entering the workflow.</p>
+        <form id="launch-form">
+          <div class="row"><div><label for="sku">SKU</label><input id="sku" value="LG-BTL-001" required /></div><div><label for="market">Market</label><select id="market"><option>US</option></select></div></div>
+          <label for="title">Product title</label><input id="title" value="Vacuum Insulated Travel Bottle" required />
+          <label for="description">Supported product facts</label><textarea id="description" required>A 750 ml stainless-steel bottle with a locking lid, double-wall insulation, and a replaceable silicone seal.</textarea>
+          <label for="vendor">Vendor</label><input id="vendor" value="Northstar Supply" required />
+          <div class="row"><div><label for="source-currency">Cost currency</label><select id="source-currency"><option>CNY</option><option>USD</option><option>EUR</option><option>GBP</option></select></div><div><label for="target-currency">Sell currency</label><select id="target-currency"><option>USD</option><option>EUR</option><option>GBP</option></select></div></div>
+          <div class="row"><div><label for="unit-cost">Unit cost</label><input id="unit-cost" type="number" step="0.01" value="62.00" /></div><div><label for="shipping">Inbound shipping</label><input id="shipping" type="number" step="0.01" value="18.00" /></div></div>
+          <div class="row"><div><label for="fulfillment">Fulfillment</label><input id="fulfillment" type="number" step="0.01" value="4.20" /></div><div><label for="competitor">Competitor reference</label><input id="competitor" type="number" step="0.01" value="29.99" /></div></div>
+          <div class="row"><div><label for="margin">Target margin</label><input id="margin" type="number" step="0.01" value="0.25" /></div><div><label for="returns">Returns reserve</label><input id="returns" type="number" step="0.01" value="0.06" /></div></div>
+          <button class="primary" id="start-button" type="submit">Build review package</button>
+        </form>
+        <div class="history"><h3>RECENT RUNS</h3><div id="history-list"><span class="panel-copy">No runs yet.</span></div></div>
+      </aside>
+
+      <section class="workspace">
+        <div id="error" class="error-banner hidden"></div>
+        <div id="empty" class="panel empty">
+          <div><div class="empty-icon">↳</div><h2>No launch selected</h2><p>Start with the verified example. LaunchGuard will calculate four price scenarios, retrieve versioned policies, build a draft, run deterministic checks, and pause for your decision.</p></div>
+        </div>
+        <div id="run-view" class="hidden">
+          <div class="panel run-header"><div><small id="run-id">RUN</small><h2 id="run-title">Launch package</h2></div><span class="status" id="run-status">running</span></div>
+          <div class="metrics">
+            <div class="panel metric"><span>Recommended price</span><strong id="price">—</strong><small id="price-floor">Floor —</small></div>
+            <div class="panel metric"><span>FX evidence</span><strong id="fx-rate">—</strong><small id="fx-source">—</small></div>
+            <div class="panel metric"><span>Policy citations</span><strong id="citation-count">0</strong><small>Versioned and inspectable</small></div>
+            <div class="panel metric"><span>Compliance blockers</span><strong id="blocker-count">0</strong><small>Must be zero to review</small></div>
+          </div>
+          <div id="review" class="panel review hidden">
+            <div class="review-head"><div><h3>Human decision required</h3><p>The graph is paused on a durable checkpoint. Review the evidence and economics before resuming it.</p></div><span class="chip">INTERRUPTED</span></div>
+            <div class="row"><div><label for="reviewer">Reviewer</label><input id="reviewer" value="Local reviewer" /></div><div><label for="review-note">Decision note</label><input id="review-note" placeholder="Why is this safe to continue?" /></div></div>
+            <div class="review-actions"><button class="approve" data-decision="approve">Approve Shopify draft</button><button class="reject" data-decision="reject">Reject launch</button></div>
+          </div>
+          <div class="content-grid">
+            <div class="panel section"><h3>Proposed listing</h3><div class="listing-title" id="listing-title">—</div><div class="listing-body" id="listing-body"></div><div id="listing-tags"></div></div>
+            <div class="panel section"><h3>Decision trail</h3><div class="timeline" id="timeline"></div></div>
+            <div class="panel section"><h3>Policy evidence</h3><div id="citations"></div></div>
+            <div class="panel section"><h3>Findings</h3><div id="findings"></div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const $ = id => document.getElementById(id);
+    let activeRunId = null;
+
+    async function api(path, options = {}) {
+      const response = await fetch(path, { headers: { "Content-Type": "application/json" }, ...options });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.detail || `Request failed: ${response.status}`);
+      return payload;
+    }
+
+    function skuPayload() {
+      return {
+        sku: $("sku").value, title: $("title").value, description: $("description").value,
+        vendor: $("vendor").value, market: $("market").value,
+        source_currency: $("source-currency").value, target_currency: $("target-currency").value,
+        unit_cost: $("unit-cost").value, inbound_shipping: $("shipping").value,
+        fulfillment_cost: $("fulfillment").value, duty_rate: "0.075",
+        platform_fee_rate: "0.029", vat_rate: "0", return_reserve_rate: $("returns").value,
+        ad_cost_rate: "0.12", target_margin: $("margin").value,
+        competitor_price: $("competitor").value || null, source_reference: "control-room-input"
+      };
+    }
+
+    function showError(error) { $("error").textContent = error.message; $("error").classList.remove("hidden"); }
+    function clearError() { $("error").classList.add("hidden"); }
+    function money(value, currency) { return value ? `${currency || ""} ${Number(value).toFixed(2)}` : "—"; }
+
+    function render(payload) {
+      const state = payload.run.state || payload.run;
+      const status = payload.run.status || state.status;
+      const pricing = state.pricing || {};
+      const fx = state.fx || {};
+      const listing = state.listing || {};
+      const findings = state.findings || [];
+      const citations = state.citations || [];
+      activeRunId = payload.run.run_id || state.run_id;
+      const url = new URL(window.location.href);
+      url.searchParams.set("run", activeRunId);
+      window.history.replaceState({}, "", url);
+      $("empty").classList.add("hidden"); $("run-view").classList.remove("hidden");
+      $("run-id").textContent = activeRunId; $("run-title").textContent = state.sku?.title || "Launch package";
+      $("run-status").textContent = status; $("run-status").className = `status ${status}`;
+      $("price").textContent = money(pricing.recommended_price, pricing.currency);
+      $("price-floor").textContent = `Floor ${money(pricing.minimum_price, pricing.currency)}`;
+      $("fx-rate").textContent = fx.rate || "—"; $("fx-source").textContent = fx.provider || "Not resolved";
+      $("citation-count").textContent = citations.length;
+      $("blocker-count").textContent = findings.filter(item => item.severity === "blocker").length;
+      $("listing-title").textContent = listing.title || "—";
+      $("listing-body").innerHTML = listing.description_html || "<p>No draft was generated.</p>";
+      $("listing-tags").innerHTML = (listing.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+      $("citations").innerHTML = citations.length ? citations.map(item => `<div class="citation"><strong>${escapeHtml(item.document_id)} · ${escapeHtml(item.title)}</strong><span>Effective ${escapeHtml(item.effective_date)} · score ${item.score}</span><span>${escapeHtml(item.chunk.slice(0, 240))}${item.chunk.length > 240 ? "…" : ""}</span></div>`).join("") : "<span class='panel-copy'>No policy evidence.</span>";
+      $("findings").innerHTML = findings.length ? findings.map(item => `<div class="finding ${item.severity}"><strong>${escapeHtml(item.severity.toUpperCase())} · ${escapeHtml(item.code)}</strong><span>${escapeHtml(item.message)}</span></div>`).join("") : "<span class='panel-copy'>No findings yet.</span>";
+      $("timeline").innerHTML = (payload.events || []).map(item => `<div class="event">${escapeHtml(item.node)}<small>${escapeHtml(item.status)} · ${item.duration_ms} ms</small></div>`).join("");
+      $("review").classList.toggle("hidden", status !== "pending_approval");
+    }
+
+    function escapeHtml(value) { const node = document.createElement("div"); node.textContent = String(value ?? ""); return node.innerHTML; }
+
+    async function loadHistory() {
+      try {
+        const runs = await api("/api/runs?limit=8");
+        $("history-list").innerHTML = runs.length ? runs.map(run => `<div class="history-item" data-run="${run.run_id}"><strong>${escapeHtml(run.sku)}</strong><span>${escapeHtml(run.status)} · ${new Date(run.updated_at).toLocaleString()}</span></div>`).join("") : "<span class='panel-copy'>No runs yet.</span>";
+        document.querySelectorAll("[data-run]").forEach(node => node.addEventListener("click", async () => { clearError(); try { render(await api(`/api/runs/${node.dataset.run}`)); } catch (error) { showError(error); } }));
+        const requestedRun = new URLSearchParams(window.location.search).get("run");
+        if (!activeRunId && requestedRun) render(await api(`/api/runs/${encodeURIComponent(requestedRun)}`));
+      } catch (error) { showError(error); }
+    }
+
+    $("launch-form").addEventListener("submit", async event => {
+      event.preventDefault(); clearError(); $("start-button").disabled = true; $("start-button").textContent = "Building review package…";
+      try { render(await api("/api/runs", { method: "POST", body: JSON.stringify({ sku: skuPayload() }) })); await loadHistory(); }
+      catch (error) { showError(error); }
+      finally { $("start-button").disabled = false; $("start-button").textContent = "Build review package"; }
+    });
+
+    document.querySelectorAll("[data-decision]").forEach(button => button.addEventListener("click", async () => {
+      clearError(); button.disabled = true;
+      try {
+        const decision = { action: button.dataset.decision, reviewer: $("reviewer").value, note: $("review-note").value };
+        render(await api(`/api/runs/${activeRunId}/decision`, { method: "POST", body: JSON.stringify(decision) })); await loadHistory();
+      } catch (error) { showError(error); }
+      finally { button.disabled = false; }
+    }));
+
+    loadHistory();
+  </script>
+</body>
+</html>

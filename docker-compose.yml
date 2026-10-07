@@ -1,0 +1,14 @@
+services:
+  launchguard:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      LAUNCHGUARD_FX_MODE: "live"
+      LAUNCHGUARD_SHOPIFY_MODE: "dry-run"
+    volumes:
+      - launchguard-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  launchguard-data:
