@@ -2,7 +2,7 @@
 
 # LaunchGuard AI
 
-**A durable, evidence-first workflow that turns SKU economics into reviewed Shopify drafts.**
+**A reviewable product-launch workflow for pricing, policy checks, and Shopify drafts.**
 
 [![Python 3.9–3.12](https://img.shields.io/badge/Python-3.9%E2%80%933.12-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/Workflow-LangGraph-1C3C3C)](https://github.com/langchain-ai/langgraph)
@@ -19,10 +19,10 @@
 
 ## The problem
 
-Product teams often jump from a supplier row to generated copy without preserving the commercial assumptions, policy evidence, or human decision that justified the launch. LaunchGuard makes that chain explicit:
+A supplier record can become a product listing before anyone has checked the margin assumptions, applicable policies, or approval history. LaunchGuard keeps those decisions in one traceable workflow:
 
 ```text
-operator-owned SKU evidence
+catalog and cost inputs
 → sourced FX rate
 → versioned policy citations
 → contribution-margin scenarios
@@ -32,27 +32,27 @@ operator-owned SKU evidence
 → idempotent Shopify DRAFT
 ```
 
-This is intentionally **not** a market-demand oracle. It does not pretend that a generic public product API can estimate Amazon sales. The workflow starts with data the operator owns, records every assumption, and stops safely when evidence or approval is missing.
+LaunchGuard works from catalog and cost data supplied by the operator. It does not estimate demand or marketplace sales. If required evidence or approval is missing, the run stops before Shopify delivery.
 
 <img src="docs/assets/architecture.svg" alt="LaunchGuard architecture and durable review boundary" width="100%" />
 
-## What is materially different
+## How it works
 
 | Design choice | Implementation | Operational value |
 |---|---|---|
-| Real human-in-the-loop | LangGraph `interrupt()` plus SQLite checkpoints and stable thread IDs | A run can pause, survive process restart, and resume after review |
-| Services, not fake agents | FX, pricing, retrieval, compliance, persistence, and delivery are deterministic services | Business rules remain inspectable and testable |
-| Operator-owned evidence | Strict CSV/JSON SKU contract with source reference | Avoids presenting demo catalog data as market intelligence |
+| Checkpointed review | LangGraph `interrupt()` plus SQLite checkpoints and stable thread IDs | A run can pause, survive process restart, and resume after review |
+| Deterministic business rules | FX, pricing, retrieval, compliance, persistence, and delivery use explicit services | Calculations and controls remain inspectable and testable |
+| Traceable inputs | Strict CSV/JSON SKU contract with a source reference | Reviewers can see where the commercial assumptions came from |
 | Versioned policy retrieval | SQLite FTS5, market filters, effective dates, source paths, and citation IDs | Reviewers can inspect exactly which rule supported the draft |
 | Unit economics | Duty, shipping, fulfillment, fees, VAT, returns, ads, margin, FX, and four stress scenarios | Makes commercial feasibility visible before copy is approved |
-| Safe delivery | Dry-run default, explicit review, deterministic handle, remote lookup, local ledger, Shopify `DRAFT` status | Reduces accidental publishing and duplicate products |
+| Draft-only delivery | Dry-run default, explicit review, deterministic handle, remote lookup, local ledger, Shopify `DRAFT` status | Reduces accidental publishing and duplicate products |
 | Evaluation gate | Reproducible cases for clean launches, commercial warnings, and prompt-injection blocking | Changes can be measured instead of judged only by demos |
 
 ## Control room
 
-<img src="docs/assets/review-screen.png" alt="LaunchGuard web control room showing a real workflow paused for human approval" width="100%" />
+<img src="docs/assets/review-screen.png" alt="LaunchGuard control room with a product review waiting for approval" width="100%" />
 
-The web UI is the real local application, not a conceptual mockup. It starts workflows, displays pricing and FX provenance, renders policy citations and compliance findings, and resumes a paused run after approval or rejection.
+Use the control room to start a launch review, compare the recommended price with its floor, inspect the FX source and policy citations, and approve or reject the draft. Runs waiting for review remain available after a restart.
 
 ## Quickstart
 
@@ -67,7 +67,7 @@ python -m pip install -e ".[dev]"
 launchguard serve
 ```
 
-Open [http://127.0.0.1:8080](http://127.0.0.1:8080). The default configuration needs no LLM or Shopify credentials.
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080). The default setup works without model or Shopify credentials.
 
 ### Docker
 
@@ -118,7 +118,7 @@ Each review includes:
 - +2 percentage points in returns;
 - +1 percentage point in platform fees.
 
-The model is decision support, not a forecast. It intentionally exposes every input instead of hiding them behind an agent prompt.
+The pricing result is decision support, not a forecast. Every input appears in the review package so the assumptions can be checked before approval.
 
 ## Policy retrieval and generation
 
@@ -133,7 +133,7 @@ effective_date: 2026-02-01
 ---
 ```
 
-SQLite FTS5 retrieves market-appropriate chunks and returns document ID, effective date, source path, content, and score. The deterministic generator is used by default. An optional OpenAI-compatible endpoint can be enabled, but its JSON output is schema-validated and may cite only retrieved evidence IDs.
+SQLite FTS5 retrieves market-appropriate sections and returns the document ID, effective date, source path, content, and score. The default listing builder is deterministic. An OpenAI-compatible endpoint can be enabled for model-written copy, but the response must still pass schema validation and may cite only retrieved evidence IDs.
 
 ## Shopify safety
 
@@ -164,15 +164,15 @@ make eval
 
 CI runs on Python 3.9, 3.11, and 3.12, enforces at least 80% branch-aware coverage, executes the evaluation gate, and builds the production container. Tests use mock transports and never need paid credentials.
 
-Verified locally on the release candidate:
+Current verification results:
 
 - 34 automated tests passing;
 - 83.76% branch-aware coverage;
 - 3/3 evaluation cases passing;
 - 100% decision accuracy, pricing-floor pass rate, and citation coverage on the bundled evaluation set;
-- one real browser acceptance path from evidence intake to checkpointed approval and idempotent Shopify dry-run receipt.
+- one browser acceptance test from catalog input to checkpointed approval and an idempotent Shopify dry-run receipt.
 
-These are repository quality metrics, not claims about commercial lift. The small bundled evaluation is a regression gate, not a production benchmark. It reports:
+These figures measure the repository's test and regression suite; they do not measure commercial lift. The bundled evaluation reports:
 
 - decision accuracy;
 - pricing-floor pass rate;
@@ -204,7 +204,7 @@ src/launchguard/
 ├── models.py                 # Strict evidence and output contracts
 ├── store.py                  # Run, event, approval, and delivery ledger
 ├── connectors/
-│   ├── catalog.py            # Operator-owned CSV evidence
+│   ├── catalog.py            # Validated CSV catalog input
 │   ├── fx.py                 # Live FX with explicit fallback provenance
 │   └── shopify.py            # Guarded GraphQL draft delivery
 └── services/
@@ -217,11 +217,11 @@ src/launchguard/
 ## Honest boundaries
 
 - Bundled policy files are examples, not legal advice or current marketplace terms.
-- The fallback FX table is deliberately dated and raises a warning.
+- The fallback FX table is dated and raises a warning whenever it is used.
 - The project does not estimate demand, sales, or conversion.
 - Live Shopify behavior requires a development store and should be tested there first.
 - Authentication, RBAC, encrypted secrets, and centralized audit retention remain required before multi-user production use.
 
 ## Originality and license
 
-LaunchGuard is an original implementation created from an empty repository. It is not a fork and contains no source code, assets, Git history, or documentation copied from BorderPilot. It uses established open-source libraries through their public APIs and is released under the [MIT License](LICENSE).
+This repository started with an empty Git history. It is not a fork and contains no BorderPilot source code, assets, history, or documentation. LaunchGuard uses open-source libraries through their documented APIs and is released under the [MIT License](LICENSE).

@@ -1,10 +1,10 @@
-# LaunchGuard AI Engineering Report
+# LaunchGuard Engineering Report
 
 ## Executive summary
 
-LaunchGuard AI is an original, evidence-first product launch workflow built from an empty repository. It converts operator-owned SKU economics into a policy-cited listing proposal, pauses at a durable human approval boundary, and prepares or creates an idempotent Shopify draft. The system is deliberately narrower than a generic multi-agent demo: every component exists to make a commercial decision inspectable, restart-safe, and difficult to publish accidentally.
+LaunchGuard takes product costs and catalog facts through pricing, policy review, listing preparation, human approval, and Shopify draft delivery. Each run keeps the commercial inputs, retrieved rules, reviewer decision, and delivery receipt together. The workflow can stop and resume without losing its place, and Shopify writes remain draft-only.
 
-The release candidate was verified with 34 automated tests, 83.76% branch-aware coverage, three passing evaluation cases, and a real browser acceptance run through the human approval checkpoint and Shopify dry-run receipt.
+The release candidate was verified with 34 automated tests, 83.76% branch-aware coverage, three passing evaluation cases, and a browser acceptance run through the human approval checkpoint and Shopify dry-run receipt.
 
 ## Product and engineering decisions
 
@@ -12,25 +12,25 @@ The release candidate was verified with 34 automated tests, 83.76% branch-aware 
 
 The workflow begins with a strict `SKUInput` contract. Cost, logistics, fee, margin, market, vendor, and product facts are typed and validated before any generation occurs. Free text is treated as evidence, not as an instruction channel. Suspicious instruction-like payloads are blocked by deterministic compliance rules.
 
-Why it matters: a polished description is not useful if its source assumptions are missing or its claims cannot be traced to operator-provided facts.
+This keeps source assumptions attached to the listing instead of leaving reviewers to reconstruct them from generated copy.
 
 ### 2. Durable approval is part of the graph
 
 Human review is implemented with LangGraph `interrupt()` and SQLite checkpointing. The workflow uses a stable `thread_id`, persists an independent audit ledger, and resumes with `Command(resume=...)`. Delivery happens only after the resumed decision has been validated and recorded.
 
-Why it matters: the approval is not a UI-only modal. The Python process can stop while a run is waiting and a later process can resume the exact checkpoint.
+The approval is part of the persisted workflow rather than a UI-only modal. The Python process can stop while a run is waiting, and a later process can resume the same checkpoint.
 
-### 3. Deterministic services replace decorative agents
+### 3. Deterministic rules and one optional generator
 
-FX resolution, policy retrieval, pricing, compliance, persistence, and Shopify delivery are deterministic services. The only generative component is listing copy, which defaults to a deterministic generator and can be replaced by an OpenAI-compatible structured-output provider.
+FX resolution, policy retrieval, pricing, compliance, persistence, and Shopify delivery are deterministic services. Listing copy also uses a deterministic builder by default, with an optional OpenAI-compatible structured-output provider.
 
-Why it matters: calculations and safety checks remain inspectable, reproducible, and testable instead of being hidden inside prompts.
+Calculations and safety checks therefore remain inspectable, reproducible, and testable.
 
-### 4. Retrieval returns governance evidence
+### 4. Policy retrieval includes citations
 
 Policies are versioned Markdown documents with required IDs, markets, effective dates, and source paths. SQLite FTS5 retrieves chunks with citations, and the generator may cite only IDs present in the retrieved evidence set.
 
-Why it matters: retrieval is used for decision provenance rather than decorative context stuffing.
+The retrieved sections appear in the review package, so the reviewer can inspect the rule behind each decision.
 
 ### 5. Pricing exposes assumptions and stress
 
@@ -41,13 +41,13 @@ The pricing engine solves for the contribution-margin floor using converted unit
 3. a two-percentage-point increase in returns;
 4. a one-percentage-point increase in platform fees.
 
-Why it matters: the workflow can surface a commercially fragile proposal before copy approval or external delivery.
+The stress cases make a fragile price visible before the listing is approved or sent to Shopify.
 
-### 6. External delivery has a side-effect envelope
+### 6. Shopify delivery is controlled and repeatable
 
 Shopify delivery is dry-run by default. Live mode requires explicit configuration, a validated `*.myshopify.com` domain, a scoped token, a recorded human approval, and zero compliance blockers. The connector uses a deterministic handle, local delivery ledger, remote lookup, `DRAFT` status assertion, and retry handling for rate limits and transient server failures.
 
-Why it matters: retries and process restarts should not create duplicate products or silently publish a live listing.
+The duplicate controls keep retries and process restarts from creating another product for the same run.
 
 ## Workflow
 
@@ -79,7 +79,7 @@ Compliance blockers route directly to a blocked terminal state. A rejection crea
 
 The tests cover validation, CSV loading, live and fallback FX behavior, policy indexing and filtering, pricing calculations, schema-constrained generation, prompt-injection blocking, Shopify request behavior, duplicate prevention, workflow interruption, process-restart resume, API behavior, and the evaluation gate.
 
-The evaluation set is intentionally small and transparent. Its percentages are regression metrics only; they should not be represented as business impact or model quality on an external benchmark.
+The bundled evaluation is small and transparent. Its percentages are regression metrics only and should not be presented as business impact or performance on an external benchmark.
 
 ## Security and failure controls
 
@@ -104,7 +104,7 @@ The project uses open-source dependencies through their documented public APIs. 
 ## Honest limitations
 
 - The bundled policies are examples, not legal advice or a substitute for current marketplace terms.
-- The bundled FX fallback is intentionally dated and must not be treated as a live quote.
+- The bundled FX fallback is dated and must not be treated as a live quote.
 - The system does not estimate demand, sales volume, or conversion.
 - The current retrieval corpus and evaluation set are development fixtures, not production-scale evidence.
 - Authentication, role-based access, encrypted secret storage, webhook reconciliation, observability export, and centralized audit retention remain future production work.

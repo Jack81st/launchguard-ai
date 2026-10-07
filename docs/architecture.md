@@ -2,9 +2,9 @@
 
 ![LaunchGuard architecture](assets/architecture.svg)
 
-## Bounded workflow
+## Workflow boundaries
 
-LaunchGuard uses LangGraph for orchestration and durable human review. It does not label every function an agent. Currency resolution, policy retrieval, pricing, compliance, persistence, and delivery are deterministic services with explicit contracts. Listing generation is the only replaceable reasoning component.
+LaunchGuard uses LangGraph for orchestration and durable human review. Currency resolution, policy retrieval, pricing, compliance, persistence, and delivery are deterministic services with explicit contracts. Listing generation is the only component that can call a model, and the default implementation is deterministic.
 
 The graph executes:
 

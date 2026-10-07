@@ -1,6 +1,6 @@
 # Bundled FX fallback
 
-LaunchGuard includes a deliberately small, dated FX fallback table so development and incident testing remain deterministic. Fallback values are not live market data and trigger a visible compliance warning.
+LaunchGuard includes a small, dated FX fallback table for offline development and incident testing. Fallback values are not live market data and trigger a visible compliance warning.
 
 | Pair | Rate | As of |
 |---|---:|---|

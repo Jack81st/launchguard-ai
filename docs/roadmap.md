@@ -1,6 +1,6 @@
 # Roadmap
 
-The roadmap prioritizes reliability and operator evidence over adding more agents.
+The roadmap focuses on reliability, integrations, and evidence quality.
 
 ## 0.2 — Production foundations
 
@@ -32,4 +32,4 @@ The roadmap prioritizes reliability and operator evidence over adding more agent
 - Scraping marketplaces in violation of their terms
 - Claiming sales or demand predictions from generic catalog APIs
 - Autonomous live publication without accountable human review
-- Increasing agent count as a proxy for product maturity
+- Adding workflow steps without a clear operational owner or measurable benefit

@@ -149,17 +149,17 @@
 
     <section class="hero">
       <div>
-        <div class="eyebrow">EVIDENCE → ECONOMICS → REVIEW → DRAFT</div>
-        <h1>Govern every product launch.</h1>
-        <p>Turn operator-owned SKU data into a policy-cited, margin-aware Shopify draft. Every consequential action pauses for review and resumes from a durable checkpoint.</p>
+        <div class="eyebrow">CATALOG → PRICING → POLICY → REVIEW → DRAFT</div>
+        <h1>Review product economics before publishing.</h1>
+        <p>Enter a SKU and its commercial assumptions. LaunchGuard calculates the price floor, finds the applicable policies, prepares a listing, and waits for a reviewer before creating a Shopify draft.</p>
       </div>
       <div class="hero-stat"><strong>0</strong><span>automatic live publishes</span></div>
     </section>
 
     <main class="grid">
       <aside class="panel form-panel">
-        <h2 class="panel-title">Launch evidence</h2>
-        <p class="panel-copy">The values below are evidence, not instructions. Every field is validated before entering the workflow.</p>
+        <h2 class="panel-title">Product inputs</h2>
+        <p class="panel-copy">Enter the product facts and commercial assumptions used for this review. Fields are validated before the run starts.</p>
         <form id="launch-form">
           <div class="row"><div><label for="sku">SKU</label><input id="sku" value="LG-BTL-001" required /></div><div><label for="market">Market</label><select id="market"><option>US</option></select></div></div>
           <label for="title">Product title</label><input id="title" value="Vacuum Insulated Travel Bottle" required />
@@ -177,7 +177,7 @@
       <section class="workspace">
         <div id="error" class="error-banner hidden"></div>
         <div id="empty" class="panel empty">
-          <div><div class="empty-icon">↳</div><h2>No launch selected</h2><p>Start with the verified example. LaunchGuard will calculate four price scenarios, retrieve versioned policies, build a draft, run deterministic checks, and pause for your decision.</p></div>
+          <div><div class="empty-icon">↳</div><h2>No launch selected</h2><p>Use the sample SKU or replace it with your own. The review will show pricing scenarios, applicable policies, draft copy, and any compliance findings before asking for approval.</p></div>
         </div>
         <div id="run-view" class="hidden">
           <div class="panel run-header"><div><small id="run-id">RUN</small><h2 id="run-title">Launch package</h2></div><span class="status" id="run-status">running</span></div>
@@ -188,7 +188,7 @@
             <div class="panel metric"><span>Compliance blockers</span><strong id="blocker-count">0</strong><small>Must be zero to review</small></div>
           </div>
           <div id="review" class="panel review hidden">
-            <div class="review-head"><div><h3>Human decision required</h3><p>The graph is paused on a durable checkpoint. Review the evidence and economics before resuming it.</p></div><span class="chip">INTERRUPTED</span></div>
+            <div class="review-head"><div><h3>Review required</h3><p>This run is saved at a checkpoint. Check the product facts, price, policies, and findings before approving or rejecting it.</p></div><span class="chip">WAITING</span></div>
             <div class="row"><div><label for="reviewer">Reviewer</label><input id="reviewer" value="Local reviewer" /></div><div><label for="review-note">Decision note</label><input id="review-note" placeholder="Why is this safe to continue?" /></div></div>
             <div class="review-actions"><button class="approve" data-decision="approve">Approve Shopify draft</button><button class="reject" data-decision="reject">Reject launch</button></div>
           </div>

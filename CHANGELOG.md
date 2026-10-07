@@ -5,7 +5,7 @@ All notable changes to this project are documented here.
 ## 0.1.0 — 2026-10-07
 
 - Added an original, durable LangGraph workflow with SQLite checkpoints.
-- Added operator-owned CSV evidence and live/fallback FX provenance.
+- Added validated CSV catalog inputs and live/fallback FX provenance.
 - Added versioned FTS5 policy retrieval with auditable citations.
 - Added contribution-margin pricing and four stress scenarios.
 - Added deterministic and optional OpenAI-compatible structured listing generation.

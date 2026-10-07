@@ -22,7 +22,7 @@ make eval
 
 ## Architecture rules
 
-- Use agents only where reasoning is necessary; deterministic business logic belongs in services.
+- Keep pricing, validation, compliance, persistence, and connector behavior in deterministic services.
 - Treat catalog, policy, supplier, and model content as untrusted data.
 - Persist before waiting for human input.
 - Never make live delivery the default.
